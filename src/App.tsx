@@ -30,8 +30,21 @@ function App() {
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
 
-  // Generate a static number of baubles for the garland
-  const garlandBaubles = Array.from({ length: 18 });
+  // Generate Lights hanging in a curve
+  const totalLights = 24;
+  const lights = Array.from({ length: totalLights }).map((_, i) => {
+    // Calculate a simple curve (parabola) for the Y position
+    // x goes from -1 to 1
+    const x = (i / (totalLights - 1)) * 2 - 1; 
+    const y = x * x * 40; // Curve depth
+    return {
+      id: i,
+      left: (i / (totalLights - 1)) * 100,
+      top: y,
+      color: ['#ff3333', '#00ff00', '#ffd700', '#3333ff'][i % 4], // Red, Green, Gold, Blue
+      delay: Math.random() * 2
+    };
+  });
 
   const gifts: Gift[] = [
     { id: 1, emoji: '🎁', title: 'Warm Hugs!', message: 'Sending you a big virtual hug this Christmas.', rewardEmoji: '🧸' },
@@ -40,6 +53,7 @@ function App() {
   ];
 
   useEffect(() => {
+    // Snowflakes
     const flakes = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -49,7 +63,8 @@ function App() {
     }));
     setSnowflakes(flakes);
 
-    const newStars = Array.from({ length: 50 }).map((_, i) => ({
+    // Stars
+    const newStars = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       top: Math.random() * 60,
       left: Math.random() * 100,
@@ -61,16 +76,38 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- NEW: Procedural CSS Garland --- */}
-      <div className="custom-garland">
-        {garlandBaubles.map((_, i) => (
-          <div key={i} className="garland-ornament"></div>
+      
+      {/* --- NEW: Christmas Lights --- */}
+      <div className="light-wire-container">
+        {/* The wire line itself */}
+        <svg className="light-wire-svg" viewBox="0 0 100 20" preserveAspectRatio="none">
+          <path d="M0,0 Q50,20 100,0" fill="none" stroke="#333" strokeWidth="0.5" />
+        </svg>
+        
+        {/* The bulbs */}
+        {lights.map((light) => (
+          <div
+            key={light.id}
+            className="christmas-light"
+            style={{
+              left: `${light.left}%`,
+              top: `${light.top + 10}px`, // Offset to hang below wire
+              backgroundColor: light.color,
+              boxShadow: `0 0 10px ${light.color}, 0 0 20px ${light.color}`,
+              animationDelay: `${light.delay}s`
+            }}
+          >
+            <div className="bulb-socket"></div>
+          </div>
         ))}
       </div>
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
       
+      {/* Shooting Star */}
+      <div className="shooting-star"></div>
+
       <div className="cloud" style={{ width: '200px', height: '60px', top: '15%', left: '-10%', animationDuration: '45s' }}></div>
       <div className="cloud" style={{ width: '150px', height: '50px', top: '25%', left: '-20%', animationDelay: '5s' }}></div>
       <div className="cloud" style={{ width: '180px', height: '55px', top: '10%', right: '-10%', animationDuration: '55s', animationDirection: 'reverse' }}></div>
@@ -89,13 +126,14 @@ function App() {
         />
       ))}
 
-      {/* --- Background Characters & Trees (Placement preserved) --- */}
+      {/* --- Background Characters & Trees --- */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
       <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
       <div className="bg-element snowman">☃️</div>
 
+      {/* Added 'glow' class to trees for extra magic */}
       <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.8)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(1.0)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '28%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>

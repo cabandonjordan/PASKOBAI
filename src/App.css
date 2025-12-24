@@ -27,60 +27,61 @@ body {
   overflow: hidden;
 }
 
-/* --- NEW: Custom CSS Garland --- */
-.custom-garland {
+/* --- NEW: Christmas Lights --- */
+.light-wire-container {
   position: absolute;
-  top: -40px; /* Hang slightly offscreen */
-  left: -5%;
-  width: 110%; /* Wider than screen for curve */
-  height: 90px;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100px;
   z-index: 20;
-  /* Gentle downward curve shape */
-  border-radius: 0 0 50% 50% / 0 0 100% 100%;
-  
-  /* Complex gradient to simulate pine needles/fluff */
-  background: 
-    linear-gradient(135deg, transparent 35%, #0a4d0a 35%, #0a4d0a 55%, transparent 55%),
-    linear-gradient(-135deg, transparent 35%, #0f5c0f 35%, #0f5c0f 55%, transparent 55%),
-    linear-gradient(to bottom, #053305, #0e520e);
-  background-size: 15px 30px, 15px 30px, 100% 100%;
-  
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-end;
-  padding-bottom: 10px;
-  filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+  pointer-events: none;
 }
 
-/* The little baubles hanging off */
-.garland-ornament {
-  width: 14px;
-  height: 18px;
-  background: radial-gradient(circle at 30% 30%, #ff3333, #cc0000);
-  border-radius: 50%;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.3);
-  position: relative;
-  transform-origin: top center;
-  animation: sway 3s ease-in-out infinite alternate;
+.light-wire-svg {
+  position: absolute;
+  top: 0; left: -5%;
+  width: 110%; height: 100%;
+  overflow: visible;
 }
 
-/* Add little gold caps to ornaments */
-.garland-ornament::before {
-  content: ''; position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
-  width: 6px; height: 4px; background: gold; border-radius: 2px 2px 0 0;
+.christmas-light {
+  position: absolute;
+  width: 12px; height: 18px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  z-index: 21;
+  animation: lightGlow 2s infinite alternate ease-in-out;
 }
 
-/* Vary the ornaments */
-.garland-ornament:nth-child(odd) { 
-  background: radial-gradient(circle at 30% 30%, gold, darkgoldenrod); 
-  transform: translateY(8px) scale(0.9); 
-  animation-delay: 0.5s;
+.bulb-socket {
+  position: absolute;
+  top: -4px; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 5px;
+  background: #222;
+  border-radius: 2px;
 }
-.garland-ornament:nth-child(3n) { 
-  background: radial-gradient(circle at 30% 30%, silver, gray); 
-  transform: translateY(2px) scale(1.1);
-  animation-delay: 1s;
+
+@keyframes lightGlow {
+  0% { opacity: 0.6; transform: scale(0.9); filter: brightness(0.8); }
+  100% { opacity: 1; transform: scale(1.1); filter: brightness(1.3); }
+}
+
+/* --- Shooting Star --- */
+.shooting-star {
+  position: absolute;
+  top: 10%; left: -100px;
+  width: 100px; height: 2px;
+  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
+  animation: shootStar 15s linear infinite;
+  animation-delay: 5s;
+  z-index: 0;
+  transform: rotate(-20deg);
+}
+
+@keyframes shootStar {
+  0% { left: -100px; top: 20%; opacity: 1; }
+  10% { left: 120%; top: 60%; opacity: 0; }
+  100% { left: 120%; top: 60%; opacity: 0; }
 }
 
 /* --- Sky Elements --- */
@@ -116,7 +117,7 @@ body {
   bottom: 0;
   width: 120%; 
   left: -10%;
-  height: 160px; /* Horizon Line defined here */
+  height: 160px;
   background: linear-gradient(to top, #fff, #ddeeff);
   border-radius: 100% 100% 0 0 / 60px 60px 0 0;
   z-index: 5; 
@@ -134,41 +135,17 @@ body {
   filter: drop-shadow(0 5px 8px rgba(0,0,0,0.2));
 }
 
-/* POSITIONING: Sitting on the 160px high horizon */
-.santa-img {
-  width: 300px;
-  bottom: auto; top: 15%; left: -350px;
-  animation: flyAcross 25s linear infinite;
-  z-index: 15;
-}
-
-.baymax-img {
-  width: 160px;
-  left: 5%;
-  bottom: 145px; 
-  animation: breathe 3s ease-in-out infinite; 
-}
-
-.pikachu-img {
-  width: 120px;
-  right: 10%;
-  bottom: 145px; 
-  animation: bounceIdle 2s infinite ease-in-out;
-}
-
-.snowman {
-  font-size: 5rem;
-  left: 20%;
-  bottom: 150px; 
-  animation: sway 4s ease-in-out infinite;
-}
+.santa-img { width: 300px; bottom: auto; top: 15%; left: -350px; animation: flyAcross 25s linear infinite; z-index: 15; }
+.baymax-img { width: 160px; left: 5%; bottom: 145px; animation: breathe 3s ease-in-out infinite; }
+.pikachu-img { width: 120px; right: 10%; bottom: 145px; animation: bounceIdle 2s infinite ease-in-out; }
+.snowman { font-size: 5rem; left: 20%; bottom: 150px; animation: sway 4s ease-in-out infinite; }
 
 .bg-tree {
   font-size: 7rem;
   z-index: 4; 
   bottom: 145px; 
   opacity: 0.95;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6); /* Added glow to trees */
 }
 
 /* --- Main Card --- */
@@ -304,7 +281,6 @@ p {
 @keyframes sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
 @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(120vw); } }
 
-/* ---------------- MOBILE RESPONSIVENESS ---------------- */
 @media (max-width: 768px) {
   h1 { font-size: 3rem; }
   h2 { font-size: 1.8rem; }
@@ -312,15 +288,12 @@ p {
   .card { padding: 1.5rem; width: 85%; }
   .gifts-row { gap: 20px; }
   .gift-box { font-size: 3.5rem; }
-
-  /* Adjust Characters Size */
   .baymax-img { width: 100px; left: 2%; bottom: 145px; }
   .pikachu-img { width: 80px; right: 2%; bottom: 145px; }
   .snowman { font-size: 3rem; left: 15%; bottom: 145px; }
   .bg-tree { font-size: 4rem; bottom: 145px; }
   .santa-img { width: 180px; top: 18%; }
-
-  /* Adjust the custom garland for mobile */
-  .custom-garland { height: 70px; top: -30px; background-size: 10px 20px, 10px 20px, 100% 100%; }
-  .garland-ornament { width: 10px; height: 14px; }
+  
+  /* Make lights smaller on mobile */
+  .christmas-light { width: 8px; height: 12px; }
 }
