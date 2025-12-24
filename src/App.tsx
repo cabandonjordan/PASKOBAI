@@ -30,23 +30,57 @@ function App() {
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
   
-  // Audio reference for playing music
+  // Responsive light count: 14 for mobile, 28 for desktop
+  const [lightCount, setLightCount] = useState(window.innerWidth < 768 ? 14 : 28);
+  
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  // --- AUDIO HANDLER ---
   useEffect(() => {
-    // Attempt to play audio automatically on load
-    if (audioRef.current) {
-      audioRef.current.volume = 0.5; // Set volume to 50%
-      audioRef.current.play().catch(e => {
-        console.log("Autoplay blocked by browser policy:", e);
-      });
-    }
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // Set volume to 30% so it's not loud
+    audio.volume = 0.3;
+
+    const playAudio = () => {
+      audio.play()
+        .then(() => {
+          // If successful, remove listeners
+          document.removeEventListener('click', playAudio);
+          document.removeEventListener('touchstart', playAudio);
+        })
+        .catch((error) => {
+          console.log("Autoplay waiting for interaction:", error);
+        });
+    };
+
+    // Attempt auto-play immediately
+    playAudio();
+
+    // Fallback: Play on the first tap/click anywhere if autoplay was blocked
+    document.addEventListener('click', playAudio);
+    document.addEventListener('touchstart', playAudio);
+
+    return () => {
+      document.removeEventListener('click', playAudio);
+      document.removeEventListener('touchstart', playAudio);
+    };
   }, []);
 
-  // Generate Lights hanging in a precise Bezier curve
-  const totalLights = 28;
-  const lights = Array.from({ length: totalLights }).map((_, i) => {
-    const t = i / (totalLights - 1);
+  // --- RESIZE HANDLER (for Lights) ---
+  useEffect(() => {
+    const handleResize = () => {
+      setLightCount(window.innerWidth < 768 ? 14 : 28);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Generate Lights
+  const lights = Array.from({ length: lightCount }).map((_, i) => {
+    const t = i / (lightCount - 1);
     const y = 200 * t * (1 - t);
 
     return {
@@ -86,20 +120,15 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- Audio Element --- */}
-      {/* Changed to christmas.mp3 and added autoPlay */}
-      <audio ref={audioRef} src="/christmas.mp3" autoPlay loop />
-      
-      {/* Removed Music Button */}
+      {/* Audio Element */}
+      <audio ref={audioRef} src="/christmas.mp3" loop />
 
       {/* --- Christmas Lights --- */}
       <div className="light-wire-container">
-        {/* Wire SVG */}
         <svg className="light-wire-svg" viewBox="0 0 100 20" preserveAspectRatio="none">
           <path d="M0,0 Q50,20 100,0" fill="none" stroke="#222" strokeWidth="0.5" />
         </svg>
         
-        {/* Bulbs */}
         {lights.map((light) => (
           <div
             key={light.id}
@@ -119,7 +148,6 @@ function App() {
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
-      <div className="shooting-star"></div>
 
       <div className="cloud" style={{ width: '200px', height: '60px', top: '15%', left: '-10%', animationDuration: '45s' }}></div>
       <div className="cloud" style={{ width: '150px', height: '50px', top: '25%', left: '-20%', animationDelay: '5s' }}></div>
@@ -139,13 +167,18 @@ function App() {
         />
       ))}
 
-      {/* --- Background Characters & Trees --- */}
+      {/* --- Background Characters --- */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
-      {/* Removed Baymax, kept Pikachu */}
+      
+      {/* Existing Pikachu (Right side) */}
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
+      
+      {/* NEW Pokemon GIF (Left side) */}
+      <img src="/pokemon.gif" alt="Christmas Pokemon" className="bg-element pokemon-gif" />
       
       <div className="bg-element snowman">☃️</div>
 
+      {/* Trees */}
       <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.8)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(1.0)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '28%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>

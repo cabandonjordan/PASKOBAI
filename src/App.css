@@ -46,53 +46,29 @@ body {
 
 .christmas-light {
   position: absolute;
-  width: 14px; height: 22px; /* Slightly taller bulb */
+  width: 14px; height: 22px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   z-index: 21;
-  /* Centers the light horizontally on the coordinate */
   transform: translateX(-50%); 
   animation: lightGlow 2s infinite alternate ease-in-out;
-  /* Origin at the top so it swings from the wire */
   transform-origin: top center;
 }
 
 .bulb-socket {
   position: absolute;
-  /* ALIGNMENT FIX: 
-     Center the socket vertically on the wire (top: 0 of the parent is the wire).
-     Height is 6px, so top -3px centers it perfectly.
-  */
   top: -3px; 
   left: 50%;
   transform: translateX(-50%);
   width: 8px; height: 6px;
-  background: #1a1a1a; /* Darker socket */
+  background: #1a1a1a;
   border-radius: 2px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.8);
-  border-top: 1px solid #444; /* Highlight for depth */
+  border-top: 1px solid #444;
 }
 
 @keyframes lightGlow {
   0% { opacity: 0.7; filter: brightness(0.8); transform: translateX(-50%) scale(0.95); }
   100% { opacity: 1; filter: brightness(1.3); transform: translateX(-50%) scale(1.05); box-shadow: 0 0 15px currentColor; }
-}
-
-/* --- Shooting Star --- */
-.shooting-star {
-  position: absolute;
-  top: 10%; left: -100px;
-  width: 100px; height: 2px;
-  background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1));
-  animation: shootStar 15s linear infinite;
-  animation-delay: 5s;
-  z-index: 0;
-  transform: rotate(-20deg);
-}
-
-@keyframes shootStar {
-  0% { left: -100px; top: 20%; opacity: 1; }
-  10% { left: 120%; top: 60%; opacity: 0; }
-  100% { left: 120%; top: 60%; opacity: 0; }
 }
 
 /* --- Sky Elements --- */
@@ -147,8 +123,20 @@ body {
 }
 
 .santa-img { width: 300px; bottom: auto; top: 15%; left: -350px; animation: flyAcross 25s linear infinite; z-index: 15; }
+
+/* Existing Pikachu (Right) */
 .pikachu-img { width: 120px; right: 10%; bottom: 145px; animation: bounceIdle 2s infinite ease-in-out; }
-.snowman { font-size: 5rem; left: 20%; bottom: 150px; animation: sway 4s ease-in-out infinite; }
+
+/* NEW Pokemon Style (Left) */
+.pokemon-gif { 
+  width: 100px; 
+  left: 8%;
+  bottom: 135px; 
+  animation: bounceIdle 2.5s infinite ease-in-out; 
+}
+
+/* Snowman Position */
+.snowman { font-size: 5rem; left: 35%; bottom: 150px; animation: sway 4s ease-in-out infinite; }
 
 .bg-tree {
   font-size: 7rem;
@@ -164,7 +152,8 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  /* FIXED: Increased z-index to 40 so it sits ABOVE the snowflakes (z-index 25) */
+  z-index: 40;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -275,7 +264,9 @@ p {
 
 .snowflake {
   position: absolute; top: -50px; color: white; pointer-events: none;
-  animation: fall linear forwards; z-index: 25; text-shadow: 0 0 5px rgba(255,255,255,0.8);
+  /* FIXED: Set back to infinite to loop continuously */
+  animation: fall linear infinite; 
+  z-index: 25; text-shadow: 0 0 5px rgba(255,255,255,0.8);
 }
 
 /* Animations */
@@ -298,29 +289,38 @@ p {
   .card { padding: 1.5rem; width: 85%; }
   .gifts-row { gap: 20px; }
   .gift-box { font-size: 3.5rem; }
-  .pikachu-img { width: 80px; right: 2%; bottom: 145px; }
-  .snowman { font-size: 3rem; left: 15%; bottom: 145px; }
-  .bg-tree { font-size: 4rem; bottom: 145px; }
+  
+  .pikachu-img { width: 100px; right: 2%; bottom: 145px; } /* Right Pikachu */
+  .pokemon-gif { width: 70px; left: 5%; bottom: 135px; } /* New Left Pokemon */
+  
+  .snowman { font-size: 3rem; left: 38%; bottom: 145px; }
+  
+  /* Adjusted tree position for mobile visibility */
+  .bg-tree { 
+    font-size: 4rem; 
+    bottom: 155px; /* Lifted up slightly */
+  }
+  
   .santa-img { width: 180px; top: 18%; }
   .christmas-light { width: 10px; height: 16px; }
 
   /* COMPACT MODAL FOR MOBILE */
   .popup-card {
-    padding: 25px 15px; /* Reduced padding */
-    width: 80%; /* Slightly narrower */
-    max-width: 280px; /* Limit width */
+    padding: 25px 15px;
+    width: 80%;
+    max-width: 280px;
     border-width: 3px;
   }
   .popup-emoji { 
-    font-size: 4rem; /* Smaller emoji */
+    font-size: 4rem;
     margin-bottom: 10px; 
   }
   .popup-title { 
-    font-size: 1.5rem; /* Smaller title */
+    font-size: 1.5rem;
     margin-bottom: 8px; 
   }
   .popup-msg { 
-    font-size: 0.95rem; /* Smaller text */
+    font-size: 0.95rem;
     margin-bottom: 15px; 
     line-height: 1.4;
   }
@@ -329,7 +329,7 @@ p {
     font-size: 0.9rem;
   }
   .modal-light-corner {
-    width: 40px; height: 40px; /* Smaller lights */
+    width: 40px; height: 40px;
   }
   .modal-bulb {
     width: 8px; height: 10px;
