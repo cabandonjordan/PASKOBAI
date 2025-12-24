@@ -25,6 +25,13 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* ADD THESE THREE LINES */
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  
+  transform: scale(var(--scene-scale));
+  transform-origin: center center;
 }
 
 /* --- CHRISTMAS LIGHTS --- */
@@ -148,47 +155,58 @@ body {
 
 /* --- Main Card --- */
 .card-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* FIXED: Increased z-index to 40 so it sits ABOVE the snowflakes (z-index 25) */
   z-index: 40;
   width: 100%;
-  display: flex;
+  display: flex;       /* Keeps the card internal alignment strict */
   justify-content: center;
+  isolation: isolate;
+  /* REMOVE top: 50%, left: 50%, and transform: translate */
 }
 
 .card {
+  /* GLASSMORPHISM BACKGROUND */
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 25px;
-  padding: 2rem 4rem;
+  
+  /* --- NEW RESIZING LOGIC --- */
+  /* This ensures it is 90% width on phones, but never wider than 600px on desktop */
+  width: min(90%, 600px); 
+  
+  /* This makes the internal spacing shrink on mobile and grow on desktop */
+  padding: clamp(1.5rem, 5vw, 3rem);
+  
   text-align: center;
   box-shadow: 0 15px 40px rgba(0,0,0,0.4);
   animation: float 5s ease-in-out infinite;
+  
+  /* Ensure it sits above the snow but below the popup */
+  position: relative;
+  z-index: 45; 
 }
 
 h1 {
   font-family: 'Mountains of Christmas', cursive;
-  font-size: 5rem;
+  /* Resize text smoothly between 2.5rem (mobile) and 5rem (desktop) */
+  font-size: clamp(2.5rem, 10vw, 5rem); 
   margin: 0;
   background: linear-gradient(to bottom, #ff4d4d, #cc0000);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(2px 2px 0px rgba(255,255,255,0.8));
+  line-height: 1.1; /* Keeps the text lines tighter together */
 }
 
 h2 {
   font-family: 'Mountains of Christmas', cursive;
-  font-size: 2.5rem;
+  /* Resize sub-header smoothly */
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   color: var(--gold);
-  margin-top: -10px;
+  margin-top: -5px;
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
-
 p {
   margin-top: 15px;
   font-size: 1.2rem;
@@ -340,15 +358,6 @@ p {
   --scene-scale: clamp(0.85, 1vw + 0.7, 1.15);
 }
 
-.container {
-  transform: scale(var(--scene-scale));
-  transform-origin: center center;
-}
-
-/* Prevent overflow issues on ultra-wide or short screens */
-html, body {
-  height: 100svh;
-}
 
 /* 2️⃣ HARD LAYER ISOLATION — snow will NEVER overlap card or modal */
 .card-container {
@@ -378,3 +387,39 @@ html, body {
   }
 }
 
+/* --- PASTE THIS AT THE VERY BOTTOM OF App.css --- */
+/* This forcefully overrides sizes for mobile screens */
+
+@media (max-width: 768px) {
+  /* 1. Force the Card to be smaller */
+  .card {
+    width: 85% !important;        /* Force strictly 85% width */
+    max-width: 320px !important;  /* Never let it get wider than 320px */
+    padding: 1.5rem 1rem !important; /* Reduce internal spacing */
+    
+    /* 2. Move the card UP slightly so it doesn't touch trees */
+    margin-bottom: 15vh !important; 
+  }
+
+  /* 3. Drastically shrink the text so the card isn't tall */
+  h1 {
+    font-size: 2.2rem !important; /* Force font to be small enough to fit */
+    line-height: 1.1 !important;
+  }
+
+  h2 {
+    font-size: 1.4rem !important;
+    margin-top: 5px !important;
+  }
+
+  p {
+    font-size: 0.9rem !important;
+    margin-top: 10px !important;
+    padding: 0 !important;
+  }
+  
+  /* 4. Ensure the container centers properly */
+  .container {
+    align-items: center !important; /* Ensures vertical centering */
+  }
+}
