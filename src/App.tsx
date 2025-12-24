@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
 
 interface Snowflake {
@@ -29,19 +29,44 @@ function App() {
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Audio reference for playing music
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Generate Lights hanging in a curve
-  const totalLights = 24;
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        // Play and handle potential autoplay blocks
+        audioRef.current.play().catch(e => {
+          console.log("Audio playback failed (user interaction needed):", e);
+        });
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  // Generate Lights hanging in a precise Bezier curve
+  // SVG Path: M0,0 Q50,20 100,0
+  // Formula: B(t) = (1-t)^2 P0 + 2(1-t)t P1 + t^2 P2
+  // Y coords: P0=0, P1=20, P2=0
+  // Y(t) = 40 * t * (1-t) (in SVG units)
+  // Conversion: 20 SVG units = 100px container height.
+  // So Factor = 5.
+  // Pixel Y = 200 * t * (1-t)
+  
+  const totalLights = 28; // Increased count slightly for better look
   const lights = Array.from({ length: totalLights }).map((_, i) => {
-    // Calculate a simple curve (parabola) for the Y position
-    // x goes from -1 to 1
-    const x = (i / (totalLights - 1)) * 2 - 1; 
-    const y = x * x * 40; // Curve depth
+    const t = i / (totalLights - 1);
+    const y = 200 * t * (1 - t);
+
     return {
       id: i,
-      left: (i / (totalLights - 1)) * 100,
-      top: y,
-      color: ['#ff3333', '#00ff00', '#ffd700', '#3333ff'][i % 4], // Red, Green, Gold, Blue
+      left: t * 100,
+      top: y, 
+      color: ['#ff3333', '#00ff00', '#ffd700', '#3366ff'][i % 4],
       delay: Math.random() * 2
     };
   });
@@ -53,7 +78,6 @@ function App() {
   ];
 
   useEffect(() => {
-    // Snowflakes
     const flakes = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -63,7 +87,6 @@ function App() {
     }));
     setSnowflakes(flakes);
 
-    // Stars
     const newStars = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       top: Math.random() * 60,
@@ -76,22 +99,30 @@ function App() {
 
   return (
     <div className="container">
+      {/* --- Audio Element --- */}
+      {/* Ensure you have a file named christmas_song.mp3 in your public folder */}
+      <audio ref={audioRef} src="/christmas_song.mp3" loop />
       
-      {/* --- NEW: Christmas Lights --- */}
+      {/* --- Music Control Button --- */}
+      <button className="music-btn" onClick={toggleMusic}>
+        {isPlaying ? '🔇 Stop Music' : '🎅 Play Music'}
+      </button>
+
+      {/* --- Christmas Lights --- */}
       <div className="light-wire-container">
-        {/* The wire line itself */}
+        {/* Wire SVG */}
         <svg className="light-wire-svg" viewBox="0 0 100 20" preserveAspectRatio="none">
-          <path d="M0,0 Q50,20 100,0" fill="none" stroke="#333" strokeWidth="0.5" />
+          <path d="M0,0 Q50,20 100,0" fill="none" stroke="#222" strokeWidth="0.5" />
         </svg>
         
-        {/* The bulbs */}
+        {/* Bulbs */}
         {lights.map((light) => (
           <div
             key={light.id}
             className="christmas-light"
             style={{
               left: `${light.left}%`,
-              top: `${light.top + 10}px`, // Offset to hang below wire
+              top: `${light.top}px`, 
               backgroundColor: light.color,
               boxShadow: `0 0 10px ${light.color}, 0 0 20px ${light.color}`,
               animationDelay: `${light.delay}s`
@@ -104,8 +135,6 @@ function App() {
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
-      
-      {/* Shooting Star */}
       <div className="shooting-star"></div>
 
       <div className="cloud" style={{ width: '200px', height: '60px', top: '15%', left: '-10%', animationDuration: '45s' }}></div>
@@ -133,7 +162,6 @@ function App() {
       
       <div className="bg-element snowman">☃️</div>
 
-      {/* Added 'glow' class to trees for extra magic */}
       <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.8)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(1.0)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '28%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>
