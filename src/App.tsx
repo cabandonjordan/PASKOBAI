@@ -37,7 +37,6 @@ function App() {
   ];
 
   useEffect(() => {
-    // Snowflakes
     const flakes = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -47,7 +46,6 @@ function App() {
     }));
     setSnowflakes(flakes);
 
-    // Stars
     const newStars = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
       top: Math.random() * 60,
@@ -60,14 +58,13 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- REPLACED: Garland Image --- */}
-      {/* Make sure your image is named garland.png in the public folder */}
-      <img src="/garland.png" alt="Christmas Garland" className="garland" />
+      {/* --- GARLAND GIF --- */}
+      {/* Ensure you save your file as 'garland.gif' in the public folder */}
+      <img src="/garland.gif" alt="Christmas Garland" className="garland" />
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
       
-      {/* Clouds */}
       <div className="cloud" style={{ width: '200px', height: '60px', top: '15%', left: '-10%', animationDuration: '45s' }}></div>
       <div className="cloud" style={{ width: '150px', height: '50px', top: '25%', left: '-20%', animationDelay: '5s' }}></div>
       <div className="cloud" style={{ width: '180px', height: '55px', top: '10%', right: '-10%', animationDuration: '55s', animationDirection: 'reverse' }}></div>
@@ -87,22 +84,21 @@ function App() {
       ))}
 
       {/* --- Background Characters & Trees --- */}
-      {/* Note: CSS z-index is now 6 (above snow) or 4 (behind snow for trees) */}
+      {/* Adjusted positioning in CSS to sit on the 'horizon' line */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
       <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
-      {/* Snowman */}
       <div className="bg-element snowman">☃️</div>
 
-      {/* Trees - Adjusted styles in CSS to peek over the hill */}
-      <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.7)' }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(0.9)', bottom: '155px' }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ left: '30%', transform: 'scale(0.6)', opacity: 0.6 }}>🎄</div>
+      {/* Trees - Positioned to look like they are planted on the snow hill */}
+      <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.8)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(1.0)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '28%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>
       
-      <div className="bg-element bg-tree" style={{ right: '35%', transform: 'scale(0.7)', opacity: 0.6 }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ right: '22%', transform: 'scale(1.1)', bottom: '150px' }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(0.8)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '35%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '22%', transform: 'scale(1.1)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(0.9)' }}>🎄</div>
 
       {/* --- Snow --- */}
       {snowflakes.map((flake) => (
@@ -131,7 +127,6 @@ function App() {
 
       {/* --- Ground & Gifts --- */}
       <div className="ground">
-        {/* Sparkles on the ground */}
         {Array.from({ length: 15 }).map((_, i) => (
           <div 
             key={i} 
@@ -163,7 +158,6 @@ function App() {
       {selectedGift && (
         <div className="overlay" onClick={() => setSelectedGift(null)}>
           <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-            {/* Modal Corner Lights */}
             <div className="modal-light-corner top-left">
               <div className="modal-bulb red"></div>
               <div className="modal-bulb green"></div>
