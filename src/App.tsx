@@ -30,6 +30,9 @@ function App() {
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
 
+  // Generate a static number of baubles for the garland
+  const garlandBaubles = Array.from({ length: 18 });
+
   const gifts: Gift[] = [
     { id: 1, emoji: '🎁', title: 'Warm Hugs!', message: 'Sending you a big virtual hug this Christmas.', rewardEmoji: '🧸' },
     { id: 2, emoji: '🎁', title: 'Sweet Treats!', message: 'May your days be as sweet as holiday chocolate.', rewardEmoji: '🍫' },
@@ -58,9 +61,12 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- GARLAND GIF --- */}
-      {/* Ensure you save your file as 'garland.gif' in the public folder */}
-      <img src="/garland.gif" alt="Christmas Garland" className="garland" />
+      {/* --- NEW: Procedural CSS Garland --- */}
+      <div className="custom-garland">
+        {garlandBaubles.map((_, i) => (
+          <div key={i} className="garland-ornament"></div>
+        ))}
+      </div>
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
@@ -83,15 +89,13 @@ function App() {
         />
       ))}
 
-      {/* --- Background Characters & Trees --- */}
-      {/* Adjusted positioning in CSS to sit on the 'horizon' line */}
+      {/* --- Background Characters & Trees (Placement preserved) --- */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
       <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
       <div className="bg-element snowman">☃️</div>
 
-      {/* Trees - Positioned to look like they are planted on the snow hill */}
       <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.8)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(1.0)' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '28%', transform: 'scale(0.7)', opacity: 0.8 }}>🎄</div>

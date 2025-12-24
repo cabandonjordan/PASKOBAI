@@ -27,18 +27,60 @@ body {
   overflow: hidden;
 }
 
-/* --- Garland GIF --- */
-.garland {
+/* --- NEW: Custom CSS Garland --- */
+.custom-garland {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto; /* Maintains aspect ratio */
-  max-height: 180px; /* Limits height on big screens */
-  object-fit: cover;
+  top: -40px; /* Hang slightly offscreen */
+  left: -5%;
+  width: 110%; /* Wider than screen for curve */
+  height: 90px;
   z-index: 20;
-  pointer-events: none;
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+  /* Gentle downward curve shape */
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  
+  /* Complex gradient to simulate pine needles/fluff */
+  background: 
+    linear-gradient(135deg, transparent 35%, #0a4d0a 35%, #0a4d0a 55%, transparent 55%),
+    linear-gradient(-135deg, transparent 35%, #0f5c0f 35%, #0f5c0f 55%, transparent 55%),
+    linear-gradient(to bottom, #053305, #0e520e);
+  background-size: 15px 30px, 15px 30px, 100% 100%;
+  
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-end;
+  padding-bottom: 10px;
+  filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
+}
+
+/* The little baubles hanging off */
+.garland-ornament {
+  width: 14px;
+  height: 18px;
+  background: radial-gradient(circle at 30% 30%, #ff3333, #cc0000);
+  border-radius: 50%;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+  position: relative;
+  transform-origin: top center;
+  animation: sway 3s ease-in-out infinite alternate;
+}
+
+/* Add little gold caps to ornaments */
+.garland-ornament::before {
+  content: ''; position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 4px; background: gold; border-radius: 2px 2px 0 0;
+}
+
+/* Vary the ornaments */
+.garland-ornament:nth-child(odd) { 
+  background: radial-gradient(circle at 30% 30%, gold, darkgoldenrod); 
+  transform: translateY(8px) scale(0.9); 
+  animation-delay: 0.5s;
+}
+.garland-ornament:nth-child(3n) { 
+  background: radial-gradient(circle at 30% 30%, silver, gray); 
+  transform: translateY(2px) scale(1.1);
+  animation-delay: 1s;
 }
 
 /* --- Sky Elements --- */
@@ -72,9 +114,9 @@ body {
 .ground {
   position: absolute;
   bottom: 0;
-  width: 120%; /* Wider to create curve */
+  width: 120%; 
   left: -10%;
-  height: 160px; /* This defines the 'Horizon Line' */
+  height: 160px; /* Horizon Line defined here */
   background: linear-gradient(to top, #fff, #ddeeff);
   border-radius: 100% 100% 0 0 / 60px 60px 0 0;
   z-index: 5; 
@@ -86,18 +128,13 @@ body {
 }
 
 /* --- Background Characters & Trees --- */
-/* Z-index 6 puts them ON TOP of the ground (Z-index 5) */
 .bg-element {
   position: absolute;
   z-index: 6; 
   filter: drop-shadow(0 5px 8px rgba(0,0,0,0.2));
 }
 
-/* POSITIONING FIX:
-   The ground is ~160px high. 
-   We set 'bottom' to ~145-160px so elements sit ON the white line.
-*/
-
+/* POSITIONING: Sitting on the 160px high horizon */
 .santa-img {
   width: 300px;
   bottom: auto; top: 15%; left: -350px;
@@ -108,27 +145,27 @@ body {
 .baymax-img {
   width: 160px;
   left: 5%;
-  bottom: 145px; /* Sit exactly on the snow horizon */
+  bottom: 145px; 
   animation: breathe 3s ease-in-out infinite; 
 }
 
 .pikachu-img {
   width: 120px;
   right: 10%;
-  bottom: 145px; /* Sit exactly on the snow horizon */
+  bottom: 145px; 
   animation: bounceIdle 2s infinite ease-in-out;
 }
 
 .snowman {
   font-size: 5rem;
   left: 20%;
-  bottom: 150px; /* Sit exactly on the snow horizon */
+  bottom: 150px; 
   animation: sway 4s ease-in-out infinite;
 }
 
 .bg-tree {
   font-size: 7rem;
-  z-index: 4; /* Trees look better slightly behind the curve */
+  z-index: 4; 
   bottom: 145px; 
   opacity: 0.95;
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -269,32 +306,21 @@ p {
 
 /* ---------------- MOBILE RESPONSIVENESS ---------------- */
 @media (max-width: 768px) {
-  /* Scale Main Title */
   h1 { font-size: 3rem; }
   h2 { font-size: 1.8rem; }
   p { font-size: 1rem; padding: 0 10px; }
-  
-  /* Shrink Card */
   .card { padding: 1.5rem; width: 85%; }
-
-  /* Adjust Gifts row */
   .gifts-row { gap: 20px; }
   .gift-box { font-size: 3.5rem; }
 
   /* Adjust Characters Size */
-  .baymax-img { width: 100px; left: 2%; bottom: 145px; } /* Keep bottom fixed for horizon */
+  .baymax-img { width: 100px; left: 2%; bottom: 145px; }
   .pikachu-img { width: 80px; right: 2%; bottom: 145px; }
   .snowman { font-size: 3rem; left: 15%; bottom: 145px; }
-  
-  /* Adjust Trees */
   .bg-tree { font-size: 4rem; bottom: 145px; }
-
-  /* Adjust Santa */
   .santa-img { width: 180px; top: 18%; }
 
-  /* Fix Garland */
-  .garland { max-height: 100px; }
-  
-  /* Fix Ground height slightly if needed */
-  .ground { height: 160px; /* Keep horizon stable */ }
+  /* Adjust the custom garland for mobile */
+  .custom-garland { height: 70px; top: -30px; background-size: 10px 20px, 10px 20px, 100% 100%; }
+  .garland-ornament { width: 10px; height: 14px; }
 }
