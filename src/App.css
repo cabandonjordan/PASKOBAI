@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;500&display=swap');
+
+:root {
+  --primary-red: #ff3333;
+  --gold: #ffd700;
+  --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--bg-gradient);
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 3rem 4rem;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  max-width: 90%;
+  width: 450px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.icon {
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+h1 {
+  font-family: 'Mountains of Christmas', cursive;
+  font-size: 4.5rem;
+  margin: 0;
+  background: linear-gradient(to bottom, #ff3333, #ff6666);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  line-height: 1.1;
+}
+
+h2 {
+  font-family: 'Mountains of Christmas', cursive;
+  font-size: 2.5rem;
+  margin: 0;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+p {
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
+
+.snowflake {
+  position: absolute;
+  top: -50px;
+  color: white;
+  user-select: none;
+  pointer-events: none;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+@keyframes glow {
+  from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); transform: scale(1); }
+  to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); transform: scale(1.1); }
+}
