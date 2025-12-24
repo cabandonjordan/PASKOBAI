@@ -37,7 +37,8 @@ function App() {
   ];
 
   useEffect(() => {
-    const flakes = Array.from({ length: 60 }).map((_, i) => ({
+    // Increased snow count
+    const flakes = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
       duration: Math.random() * 5 + 3,
@@ -46,9 +47,9 @@ function App() {
     }));
     setSnowflakes(flakes);
 
-    const newStars = Array.from({ length: 40 }).map((_, i) => ({
+    const newStars = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
-      top: Math.random() * 50,
+      top: Math.random() * 60, // Spread stars further down
       left: Math.random() * 100,
       size: Math.random() * 3 + 1,
       delay: Math.random() * 3,
@@ -60,13 +61,19 @@ function App() {
     <div className="container">
       {/* --- Hanging Lights (Top) --- */}
       <div className="wire">
-        {Array.from({ length: 15 }).map((_, i) => (
+        {Array.from({ length: 18 }).map((_, i) => (
           <div key={i} className="light"></div>
         ))}
       </div>
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
+      
+      {/* Clouds */}
+      <div className="cloud" style={{ width: '200px', height: '60px', top: '15%', left: '-10%', animationDuration: '45s' }}></div>
+      <div className="cloud" style={{ width: '150px', height: '50px', top: '25%', left: '-20%', animationDelay: '5s' }}></div>
+      <div className="cloud" style={{ width: '180px', height: '55px', top: '10%', right: '-10%', animationDuration: '55s', animationDirection: 'reverse' }}></div>
+
       {stars.map((star) => (
         <div
           key={star.id}
@@ -86,10 +93,17 @@ function App() {
       <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
-      <div className="bg-element bg-tree" style={{ left: '5%', opacity: 0.5 }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ left: '25%', transform: 'scale(0.8)' }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ right: '30%', opacity: 0.6 }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(1.2)' }}>🎄</div>
+      {/* Extra Snowman Decoration */}
+      <div className="bg-element snowman">☃️</div>
+
+      {/* More Trees for a fuller look */}
+      <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.7)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(0.9)', bottom: '130px' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '30%', transform: 'scale(0.6)', opacity: 0.6 }}>🎄</div>
+      
+      <div className="bg-element bg-tree" style={{ right: '35%', transform: 'scale(0.7)', opacity: 0.6 }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '22%', transform: 'scale(1.1)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(0.8)' }}>🎄</div>
 
 
       {/* --- Snow --- */}
@@ -119,6 +133,21 @@ function App() {
 
       {/* --- Ground & Gifts --- */}
       <div className="ground">
+        {/* Sparkles on the ground */}
+        {Array.from({ length: 15 }).map((_, i) => (
+          <div 
+            key={i} 
+            className="sparkle"
+            style={{
+              width: Math.random() * 5 + 2 + 'px',
+              height: Math.random() * 5 + 2 + 'px',
+              left: Math.random() * 80 + 10 + '%',
+              bottom: Math.random() * 60 + 10 + 'px',
+              animationDelay: Math.random() * 2 + 's'
+            }}
+          ></div>
+        ))}
+
         <div className="gifts-row">
           {gifts.map((gift) => (
             <div
