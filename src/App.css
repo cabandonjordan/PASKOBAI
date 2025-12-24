@@ -3,10 +3,8 @@
 :root {
   --primary-red: #ff3333;
   --gold: #ffd700;
-  --wire-color: #333; /* Darker wire for visibility */
 }
 
-/* --- IMPORTANT FIX: Keeps the app full screen --- */
 html, body, #root {
   width: 100%;
   height: 100%;
@@ -29,48 +27,18 @@ body {
   overflow: hidden;
 }
 
-/* --- Hanging Lights (Top of screen) --- */
-.wire {
+/* --- NEW: Garland (Replaces hanging lights) --- */
+.garland {
   position: absolute;
-  top: 0; /* Brought down to be visible */
+  top: -10px; /* Adjust to hug the top edge */
   left: 0;
   width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: space-evenly;
-  border-bottom: 3px solid var(--wire-color); /* Thicker wire */
-  border-radius: 50%;
+  height: auto;
+  max-height: 150px; /* Prevents it from being too huge */
+  object-fit: cover; /* Ensures it stretches nicely */
   z-index: 20;
   pointer-events: none;
-}
-
-.light {
-  width: 16px; /* Bigger lights */
-  height: 34px;
-  border-radius: 50%;
-  margin-top: 55px; /* Adjust to hang from the new wire position */
-  animation: flash 1.5s infinite alternate;
-  position: relative;
-}
-
-/* Stronger Glow */
-.light:nth-child(odd) { 
-  background: #ff3333; 
-  box-shadow: 0 0 20px 5px rgba(255, 51, 51, 0.8); 
-}
-.light:nth-child(even) { 
-  background: #44ff44; 
-  box-shadow: 0 0 20px 5px rgba(68, 255, 68, 0.8); 
-  animation-delay: 0.5s; 
-}
-/* Little holder for the bulb */
-.light::before {
-  content: '';
-  position: absolute;
-  top: -4px; left: 2px;
-  width: 12px; height: 6px;
-  background: #222;
-  border-radius: 2px;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
 }
 
 /* --- Sky Elements --- */
@@ -91,7 +59,6 @@ body {
   z-index: 1;
 }
 
-/* Clouds */
 .cloud {
   position: absolute;
   background: rgba(255, 255, 255, 0.1);
@@ -101,12 +68,30 @@ body {
   animation: floatCloud 60s linear infinite;
 }
 
+/* --- Ground --- */
+/* Z-Index 5: We need characters to be > 5 to be visible */
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 120%;
+  left: -10%;
+  height: 160px;
+  background: linear-gradient(to top, #fff, #ddeeff);
+  border-radius: 100% 100% 0 0 / 60px 60px 0 0;
+  z-index: 5; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 30px;
+  box-shadow: 0 -10px 30px rgba(255, 255, 255, 0.5);
+}
+
 /* --- Background Characters & Trees --- */
+/* FIXED: z-index increased to 6 to sit ON TOP of the ground */
 .bg-element {
   position: absolute;
-  /* Lowered bottom so they sit BEHIND the ground ridge properly */
-  bottom: 110px; 
-  z-index: 4; /* Behind ground (5) but in front of sky (2) */
+  bottom: 140px; /* Raised default position */
+  z-index: 6; 
   filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
 }
 
@@ -114,37 +99,36 @@ body {
   width: 300px;
   bottom: auto; top: 15%; left: -350px;
   animation: flyAcross 25s linear infinite;
-  z-index: 15;
+  z-index: 15; /* Santa flies high */
 }
 
 .baymax-img {
   width: 160px;
-  left: 8%;
-  bottom: 100px; /* Adjust to stand on "snow" */
-  /* Keeps him moving even if GIF stops */
+  left: 5%;
+  bottom: 60px; /* Lowered so he stands ON the snow */
   animation: breathe 3s ease-in-out infinite; 
 }
 
 .pikachu-img {
-  width: 140px;
-  right: 12%;
-  bottom: 110px;
+  width: 120px;
+  right: 8%;
+  bottom: 70px; /* Lowered so he stands ON the snow */
   animation: bounceIdle 2s infinite ease-in-out;
 }
 
 .bg-tree {
   font-size: 7rem;
+  z-index: 4; /* Keep trees BEHIND the ground for depth */
+  bottom: 145px; /* Push them up so they peek over the hill */
   opacity: 0.9;
-  z-index: 4;
-  /* Using text-shadow to make them look frosty */
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .snowman {
   font-size: 5rem;
-  bottom: 120px;
+  bottom: 80px; /* Stand on snow */
   left: 20%;
-  z-index: 4;
+  z-index: 6; /* In front of snow */
   filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
   animation: sway 4s ease-in-out infinite;
 }
@@ -152,7 +136,7 @@ body {
 /* --- Main Card --- */
 .card-container {
   position: absolute;
-  top: 50%;
+  top: 55%; /* Moved down slightly to clear garland */
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
@@ -198,23 +182,6 @@ p {
   font-weight: 300;
 }
 
-/* --- Ground & Gifts --- */
-.ground {
-  position: absolute;
-  bottom: 0;
-  width: 120%; /* Wider than screen for curve */
-  left: -10%;
-  height: 160px;
-  background: linear-gradient(to top, #fff, #ddeeff);
-  border-radius: 100% 100% 0 0 / 60px 60px 0 0;
-  z-index: 5;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 30px;
-  box-shadow: 0 -10px 30px rgba(255, 255, 255, 0.5);
-}
-
 .gifts-row {
   display: flex;
   gap: 50px;
@@ -227,17 +194,6 @@ p {
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));
   position: relative;
-}
-
-.gift-box::after {
-  content: '';
-  position: absolute;
-  bottom: 5px; left: 10px; right: 10px;
-  height: 10px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 50%;
-  filter: blur(4px);
-  z-index: -1;
 }
 
 .gift-box:hover {
@@ -282,22 +238,15 @@ p {
   overflow: hidden;
 }
 
-/* Corner Lights */
 .modal-light-corner {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  pointer-events: none;
-  z-index: 2;
+  width: 60px; height: 60px; pointer-events: none; z-index: 2;
 }
 .modal-light-corner.top-left { top: -12px; left: -12px; transform: rotate(-45deg); }
 .modal-light-corner.top-right { top: -12px; right: -12px; transform: rotate(45deg); }
 
 .modal-bulb {
-  display: inline-block;
-  width: 10px; height: 14px;
-  border-radius: 50%;
-  margin: 0 3px;
+  display: inline-block; width: 10px; height: 14px; border-radius: 50%; margin: 0 3px;
   animation: flash 1s infinite alternate;
 }
 .modal-bulb.red { background: var(--primary-red); box-shadow: 0 0 8px var(--primary-red); }
@@ -308,38 +257,20 @@ p {
 .popup-msg { font-size: 1.1rem; color: #555; margin-bottom: 25px; line-height: 1.6; }
 
 .close-btn {
-  background: var(--primary-red);
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(255, 51, 51, 0.4);
-  transition: transform 0.2s;
+  background: var(--primary-red); color: white; border: none; padding: 12px 30px;
+  border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 51, 51, 0.4); transition: transform 0.2s;
 }
 .close-btn:hover { background: #cc0000; transform: scale(1.1); }
 
 /* --- Snow --- */
 .snowflake {
-  position: absolute;
-  top: -50px;
-  color: white;
-  pointer-events: none;
-  animation: fall linear forwards;
-  z-index: 25; /* Snow in front of almost everything */
-  text-shadow: 0 0 5px rgba(255,255,255,0.8);
+  position: absolute; top: -50px; color: white; pointer-events: none;
+  animation: fall linear forwards; z-index: 25; text-shadow: 0 0 5px rgba(255,255,255,0.8);
 }
 
 /* Animations */
-@keyframes flyAcross { 
-  0% { left: -350px; transform: translateY(0) rotate(5deg); }
-  25% { transform: translateY(30px) rotate(0deg); }
-  50% { transform: translateY(0) rotate(-5deg); }
-  75% { transform: translateY(-30px) rotate(0deg); }
-  100% { left: 100vw; transform: translateY(0) rotate(5deg); }
-}
+@keyframes flyAcross { 0% { left: -350px; transform: translateY(0) rotate(5deg); } 25% { transform: translateY(30px) rotate(0deg); } 50% { transform: translateY(0) rotate(-5deg); } 75% { transform: translateY(-30px) rotate(0deg); } 100% { left: 100vw; transform: translateY(0) rotate(5deg); } }
 @keyframes flash { 0%, 100% { opacity: 1; filter: brightness(1.2); } 50% { opacity: 0.4; filter: brightness(0.8); } }
 @keyframes twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
@@ -354,8 +285,8 @@ p {
 @media (max-width: 600px) {
   .gift-box { font-size: 4rem; }
   .santa-img { width: 180px; top: 12%; }
-  .baymax-img { width: 100px; left: 5%; }
-  .pikachu-img { width: 90px; right: 5%; }
+  .baymax-img { width: 100px; left: 5%; bottom: 80px; }
+  .pikachu-img { width: 90px; right: 5%; bottom: 90px; }
   h1 { font-size: 3.5rem; }
   .bg-tree { font-size: 5rem; }
 }

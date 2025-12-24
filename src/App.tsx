@@ -37,7 +37,7 @@ function App() {
   ];
 
   useEffect(() => {
-    // Increased snow count
+    // Snowflakes
     const flakes = Array.from({ length: 80 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -47,9 +47,10 @@ function App() {
     }));
     setSnowflakes(flakes);
 
+    // Stars
     const newStars = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
-      top: Math.random() * 60, // Spread stars further down
+      top: Math.random() * 60,
       left: Math.random() * 100,
       size: Math.random() * 3 + 1,
       delay: Math.random() * 3,
@@ -59,12 +60,9 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- Hanging Lights (Top) --- */}
-      <div className="wire">
-        {Array.from({ length: 18 }).map((_, i) => (
-          <div key={i} className="light"></div>
-        ))}
-      </div>
+      {/* --- REPLACED: Garland Image --- */}
+      {/* Make sure your image is named garland.png in the public folder */}
+      <img src="/garland.png" alt="Christmas Garland" className="garland" />
 
       {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
@@ -89,22 +87,22 @@ function App() {
       ))}
 
       {/* --- Background Characters & Trees --- */}
+      {/* Note: CSS z-index is now 6 (above snow) or 4 (behind snow for trees) */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
       <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
-      {/* Extra Snowman Decoration */}
+      {/* Snowman */}
       <div className="bg-element snowman">☃️</div>
 
-      {/* More Trees for a fuller look */}
+      {/* Trees - Adjusted styles in CSS to peek over the hill */}
       <div className="bg-element bg-tree" style={{ left: '2%', transform: 'scale(0.7)' }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(0.9)', bottom: '130px' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '15%', transform: 'scale(0.9)', bottom: '155px' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ left: '30%', transform: 'scale(0.6)', opacity: 0.6 }}>🎄</div>
       
       <div className="bg-element bg-tree" style={{ right: '35%', transform: 'scale(0.7)', opacity: 0.6 }}>🎄</div>
-      <div className="bg-element bg-tree" style={{ right: '22%', transform: 'scale(1.1)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '22%', transform: 'scale(1.1)', bottom: '150px' }}>🎄</div>
       <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(0.8)' }}>🎄</div>
-
 
       {/* --- Snow --- */}
       {snowflakes.map((flake) => (
@@ -165,7 +163,6 @@ function App() {
       {selectedGift && (
         <div className="overlay" onClick={() => setSelectedGift(null)}>
           <div className="popup-card" onClick={(e) => e.stopPropagation()}>
-            
             {/* Modal Corner Lights */}
             <div className="modal-light-corner top-left">
               <div className="modal-bulb red"></div>
