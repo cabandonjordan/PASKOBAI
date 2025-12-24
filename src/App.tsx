@@ -29,35 +29,22 @@ function App() {
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   
   // Audio reference for playing music
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const toggleMusic = () => {
+  useEffect(() => {
+    // Attempt to play audio automatically on load
     if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        // Play and handle potential autoplay blocks
-        audioRef.current.play().catch(e => {
-          console.log("Audio playback failed (user interaction needed):", e);
-        });
-      }
-      setIsPlaying(!isPlaying);
+      audioRef.current.volume = 0.5; // Set volume to 50%
+      audioRef.current.play().catch(e => {
+        console.log("Autoplay blocked by browser policy:", e);
+      });
     }
-  };
+  }, []);
 
   // Generate Lights hanging in a precise Bezier curve
-  // SVG Path: M0,0 Q50,20 100,0
-  // Formula: B(t) = (1-t)^2 P0 + 2(1-t)t P1 + t^2 P2
-  // Y coords: P0=0, P1=20, P2=0
-  // Y(t) = 40 * t * (1-t) (in SVG units)
-  // Conversion: 20 SVG units = 100px container height.
-  // So Factor = 5.
-  // Pixel Y = 200 * t * (1-t)
-  
-  const totalLights = 28; // Increased count slightly for better look
+  const totalLights = 28;
   const lights = Array.from({ length: totalLights }).map((_, i) => {
     const t = i / (totalLights - 1);
     const y = 200 * t * (1 - t);
@@ -100,13 +87,10 @@ function App() {
   return (
     <div className="container">
       {/* --- Audio Element --- */}
-      {/* Ensure you have a file named christmas_song.mp3 in your public folder */}
-      <audio ref={audioRef} src="/christmas_song.mp3" loop />
+      {/* Changed to christmas.mp3 and added autoPlay */}
+      <audio ref={audioRef} src="/christmas.mp3" autoPlay loop />
       
-      {/* --- Music Control Button --- */}
-      <button className="music-btn" onClick={toggleMusic}>
-        {isPlaying ? '🔇 Stop Music' : '🎅 Play Music'}
-      </button>
+      {/* Removed Music Button */}
 
       {/* --- Christmas Lights --- */}
       <div className="light-wire-container">
@@ -157,7 +141,7 @@ function App() {
 
       {/* --- Background Characters & Trees --- */}
       <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
-      <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
+      {/* Removed Baymax, kept Pikachu */}
       <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
       
       <div className="bg-element snowman">☃️</div>

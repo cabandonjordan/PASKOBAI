@@ -27,33 +27,6 @@ body {
   overflow: hidden;
 }
 
-/* --- AUDIO BUTTON --- */
-.music-btn {
-  position: absolute;
-  top: 20px; left: 20px;
-  z-index: 100;
-  background: rgba(255, 51, 51, 0.8); /* Red background */
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  border-radius: 50px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-family: 'Mountains of Christmas', cursive;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.music-btn:hover {
-  background: #cc0000;
-  transform: scale(1.1);
-  box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
-}
-
 /* --- CHRISTMAS LIGHTS --- */
 .light-wire-container {
   position: absolute;
@@ -174,7 +147,6 @@ body {
 }
 
 .santa-img { width: 300px; bottom: auto; top: 15%; left: -350px; animation: flyAcross 25s linear infinite; z-index: 15; }
-.baymax-img { width: 160px; left: 5%; bottom: 145px; animation: breathe 3s ease-in-out infinite; }
 .pikachu-img { width: 120px; right: 10%; bottom: 145px; animation: bounceIdle 2s infinite ease-in-out; }
 .snowman { font-size: 5rem; left: 20%; bottom: 150px; animation: sway 4s ease-in-out infinite; }
 
@@ -326,11 +298,40 @@ p {
   .card { padding: 1.5rem; width: 85%; }
   .gifts-row { gap: 20px; }
   .gift-box { font-size: 3.5rem; }
-  .baymax-img { width: 100px; left: 2%; bottom: 145px; }
   .pikachu-img { width: 80px; right: 2%; bottom: 145px; }
   .snowman { font-size: 3rem; left: 15%; bottom: 145px; }
   .bg-tree { font-size: 4rem; bottom: 145px; }
   .santa-img { width: 180px; top: 18%; }
   .christmas-light { width: 10px; height: 16px; }
-  .music-btn { top: 10px; left: 10px; padding: 8px 15px; font-size: 0.9rem; }
+
+  /* COMPACT MODAL FOR MOBILE */
+  .popup-card {
+    padding: 25px 15px; /* Reduced padding */
+    width: 80%; /* Slightly narrower */
+    max-width: 280px; /* Limit width */
+    border-width: 3px;
+  }
+  .popup-emoji { 
+    font-size: 4rem; /* Smaller emoji */
+    margin-bottom: 10px; 
+  }
+  .popup-title { 
+    font-size: 1.5rem; /* Smaller title */
+    margin-bottom: 8px; 
+  }
+  .popup-msg { 
+    font-size: 0.95rem; /* Smaller text */
+    margin-bottom: 15px; 
+    line-height: 1.4;
+  }
+  .close-btn {
+    padding: 8px 24px;
+    font-size: 0.9rem;
+  }
+  .modal-light-corner {
+    width: 40px; height: 40px; /* Smaller lights */
+  }
+  .modal-bulb {
+    width: 8px; height: 10px;
+  }
 }
