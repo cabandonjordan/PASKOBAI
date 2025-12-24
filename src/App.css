@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&family=Poppins:wght@300;600&display=swap');
 
 :root {
   --primary-red: #ff3333;
   --gold: #ffd700;
-  --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  --bg-gradient: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%); /* Sunset/Night vibe */
+  --snow-white: #f0f4f8;
 }
 
 body {
@@ -12,95 +13,178 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: var(--bg-gradient);
+  background: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
   font-family: 'Poppins', sans-serif;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  user-select: none; /* Prevents highlighting text when clicking fast */
 }
 
 .container {
   position: relative;
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 25px;
-  padding: 3rem 4rem;
-  text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-  z-index: 10;
-  max-width: 90%;
-  width: 450px;
-  animation: float 6s ease-in-out infinite;
+/* --- The Snowy Ground --- */
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to top, #fff, #eef2f3);
+  border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+  box-shadow: 0 -10px 20px rgba(255, 255, 255, 0.2);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 20px;
 }
 
-.icon {
-  font-size: 5rem;
-  margin-bottom: 0.5rem;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
-  animation: glow 3s ease-in-out infinite alternate;
+/* --- Background Trees --- */
+.bg-tree {
+  position: absolute;
+  bottom: 120px;
+  font-size: 8rem;
+  opacity: 0.6;
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* --- Flying Santa --- */
+.santa-container {
+  position: absolute;
+  top: 10%;
+  left: -20%; /* Start off-screen */
+  font-size: 4rem;
+  z-index: 2;
+  animation: flyAcross 15s linear infinite;
+  opacity: 0.8;
+}
+
+/* --- The Main Card --- */
+.card-container {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 2rem 3rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  animation: float 6s ease-in-out infinite;
+  max-width: 90%;
+  width: 400px;
 }
 
 h1 {
   font-family: 'Mountains of Christmas', cursive;
-  font-size: 4.5rem;
+  font-size: 3.5rem;
   margin: 0;
-  background: linear-gradient(to bottom, #ff3333, #ff6666);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  line-height: 1.1;
+  color: #ff4d4d;
+  text-shadow: 2px 2px 0 #fff;
 }
 
 h2 {
   font-family: 'Mountains of Christmas', cursive;
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin: 0;
   color: var(--gold);
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 
 p {
-  font-size: 1.1rem;
-  color: #e0e0e0;
-  margin-top: 1.5rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  margin-top: 10px;
 }
 
+/* --- Interactive Gifts --- */
+.gifts-row {
+  display: flex;
+  gap: 20px;
+  z-index: 20; /* On top of ground */
+  margin-bottom: 10px;
+}
+
+.gift-box {
+  font-size: 4rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.gift-box:hover {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.gift-box.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.gift-reward {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3rem;
+  animation: popUp 1s ease-out forwards;
+  pointer-events: none;
+}
+
+/* --- Snow --- */
 .snowflake {
   position: absolute;
   top: -50px;
   color: white;
-  user-select: none;
   pointer-events: none;
   animation-name: fall;
   animation-timing-function: linear;
   animation-fill-mode: forwards;
-  z-index: 1;
+  z-index: 4;
+}
+
+/* Animations */
+@keyframes flyAcross {
+  0% { left: -20%; transform: rotate(5deg); }
+  100% { left: 120%; transform: rotate(-5deg); }
 }
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  50% { transform: translateY(-15px); }
 }
 
 @keyframes fall {
-  to { transform: translateY(110vh) rotate(360deg); }
+  to { transform: translateY(110vh); }
 }
 
-@keyframes glow {
-  from { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.2)); transform: scale(1); }
-  to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); transform: scale(1.1); }
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+@keyframes popUp {
+  0% { opacity: 0; transform: translate(-50%, 20px) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50px) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -100px) scale(1); }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .ground { height: 120px; }
+  .gift-box { font-size: 3rem; }
+  .bg-tree { font-size: 5rem; bottom: 100px; }
+  h1 { font-size: 2.5rem; }
 }
