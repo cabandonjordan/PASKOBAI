@@ -20,38 +20,38 @@ interface Star {
 interface Gift {
   id: number;
   emoji: string;
-  surprise: string;
-  isOpened: boolean;
+  title: string;
+  message: string;
+  rewardEmoji: string;
 }
 
 function App() {
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
-  
-  // Interactive Gifts
-  const [gifts, setGifts] = useState<Gift[]>([
-    { id: 1, emoji: '🎁', surprise: '🧸 Toy!', isOpened: false },
-    { id: 2, emoji: '🎁', surprise: '💖 Love', isOpened: false },
-    { id: 3, emoji: '🎁', surprise: '💰 Cash', isOpened: false },
-    { id: 4, emoji: '🎁', surprise: '🍫 Choco', isOpened: false },
-  ]);
+  const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
 
-  // Setup animations on load
+  // You can customize your messages here!
+  const gifts: Gift[] = [
+    { id: 1, emoji: '🎁', title: 'Warm Hugs!', message: 'Sending you a big virtual hug this Christmas.', rewardEmoji: '🧸' },
+    { id: 2, emoji: '🎁', title: 'Sweet Treats!', message: 'May your days be as sweet as holiday chocolate.', rewardEmoji: '🍫' },
+    { id: 3, emoji: '🎁', title: 'Pure Joy!', message: 'Wishing you happiness that lasts all year round.', rewardEmoji: '✨' },
+  ];
+
   useEffect(() => {
     // Generate Snow
-    const flakes = Array.from({ length: 50 }).map((_, i) => ({
+    const flakes = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
-      duration: Math.random() * 5 + 4,
+      duration: Math.random() * 5 + 3,
       delay: Math.random() * 5,
       size: Math.random() * 1.5 + 0.5,
     }));
     setSnowflakes(flakes);
 
-    // Generate Background Stars
-    const newStars = Array.from({ length: 30 }).map((_, i) => ({
+    // Generate Stars
+    const newStars = Array.from({ length: 40 }).map((_, i) => ({
       id: i,
-      top: Math.random() * 60, // Top 60% of screen only
+      top: Math.random() * 50,
       left: Math.random() * 100,
       size: Math.random() * 3 + 1,
       delay: Math.random() * 3,
@@ -59,34 +59,16 @@ function App() {
     setStars(newStars);
   }, []);
 
-  const handleGiftClick = (id: number) => {
-    setGifts((prev) =>
-      prev.map((gift) => {
-        if (gift.id === id && !gift.isOpened) {
-          return { ...gift, isOpened: true };
-        }
-        return gift;
-      })
-    );
-
-    // Reset after 2 seconds
-    setTimeout(() => {
-      setGifts((prev) =>
-        prev.map((gift) => (gift.id === id ? { ...gift, isOpened: false } : gift))
-      );
-    }, 2000);
-  };
-
   return (
     <div className="container">
-      {/* --- Decoration: Hanging Lights --- */}
+      {/* --- Hanging Lights --- */}
       <div className="wire">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {Array.from({ length: 15 }).map((_, i) => (
           <div key={i} className="light"></div>
         ))}
       </div>
 
-      {/* --- Background: Stars & Moon --- */}
+      {/* --- Sky --- */}
       <div className="moon">🌕</div>
       {stars.map((star) => (
         <div
@@ -102,10 +84,11 @@ function App() {
         />
       ))}
 
-      {/* --- Flying Santa --- */}
-      <div className="santa-container">🎅🦌💨</div>
+      {/* --- SANTA GIF --- */}
+      {/* Make sure santa.gif is in your public folder */}
+      <img src="/santa.gif" alt="Santa" className="santa-img" />
 
-      {/* --- Falling Snow --- */}
+      {/* --- Snow --- */}
       {snowflakes.map((flake) => (
         <div
           key={flake.id}
@@ -121,32 +104,43 @@ function App() {
         </div>
       ))}
 
-      {/* --- Main Greeting Card --- */}
+      {/* --- Main Card --- */}
       <div className="card-container">
         <div className="card">
           <h1>Merry Christmas</h1>
-          <h2>To The World!</h2>
-          <p>May your holidays be filled with<br/>warmth and wonderful surprises.</p>
+          <h2>To You!</h2>
+          <p>Tap a gift below for a special surprise</p>
         </div>
       </div>
 
-      {/* --- Ground, Snowman & Gifts --- */}
-      <div className="snowman">☃️</div>
-      
+      {/* --- Ground & Gifts --- */}
       <div className="ground">
         <div className="gifts-row">
           {gifts.map((gift) => (
             <div
               key={gift.id}
-              className={`gift-box ${gift.isOpened ? 'shake' : ''}`}
-              onClick={() => handleGiftClick(gift.id)}
+              className="gift-box"
+              onClick={() => setSelectedGift(gift)}
             >
               {gift.emoji}
-              {gift.isOpened && <div className="gift-reward">{gift.surprise}</div>}
             </div>
           ))}
         </div>
       </div>
+
+      {/* --- POPUP MODAL --- */}
+      {selectedGift && (
+        <div className="overlay" onClick={() => setSelectedGift(null)}>
+          <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+            <span className="popup-emoji">{selectedGift.rewardEmoji}</span>
+            <div className="popup-title">{selectedGift.title}</div>
+            <div className="popup-msg">{selectedGift.message}</div>
+            <button className="close-btn" onClick={() => setSelectedGift(null)}>
+              Thank You!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
