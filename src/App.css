@@ -335,3 +335,46 @@ p {
     width: 8px; height: 10px;
   }
 }
+
+:root {
+  --scene-scale: clamp(0.85, 1vw + 0.7, 1.15);
+}
+
+.container {
+  transform: scale(var(--scene-scale));
+  transform-origin: center center;
+}
+
+/* Prevent overflow issues on ultra-wide or short screens */
+html, body {
+  height: 100svh;
+}
+
+/* 2️⃣ HARD LAYER ISOLATION — snow will NEVER overlap card or modal */
+.card-container {
+  isolation: isolate;
+  z-index: 40; /* reinforce existing intent */
+}
+
+.overlay {
+  isolation: isolate;
+  z-index: 100;
+}
+
+.popup-card {
+  isolation: isolate;
+  position: relative;
+}
+
+/* 3️⃣ ENSURE SNOW STAYS BELOW UI FOREVER */
+.snowflake {
+  z-index: 25;
+}
+
+/* 4️⃣ MOBILE SAFETY — no jump, no reflow */
+@media (max-width: 768px) {
+  .container {
+    transform: scale(0.9);
+  }
+}
+
