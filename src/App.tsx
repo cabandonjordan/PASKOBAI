@@ -30,7 +30,6 @@ function App() {
   const [stars, setStars] = useState<Star[]>([]);
   const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
 
-  // You can customize your messages here!
   const gifts: Gift[] = [
     { id: 1, emoji: '🎁', title: 'Warm Hugs!', message: 'Sending you a big virtual hug this Christmas.', rewardEmoji: '🧸' },
     { id: 2, emoji: '🎁', title: 'Sweet Treats!', message: 'May your days be as sweet as holiday chocolate.', rewardEmoji: '🍫' },
@@ -38,7 +37,6 @@ function App() {
   ];
 
   useEffect(() => {
-    // Generate Snow
     const flakes = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -48,7 +46,6 @@ function App() {
     }));
     setSnowflakes(flakes);
 
-    // Generate Stars
     const newStars = Array.from({ length: 40 }).map((_, i) => ({
       id: i,
       top: Math.random() * 50,
@@ -61,14 +58,14 @@ function App() {
 
   return (
     <div className="container">
-      {/* --- Hanging Lights --- */}
+      {/* --- Hanging Lights (Top) --- */}
       <div className="wire">
         {Array.from({ length: 15 }).map((_, i) => (
           <div key={i} className="light"></div>
         ))}
       </div>
 
-      {/* --- Sky --- */}
+      {/* --- Sky & Background --- */}
       <div className="moon">🌕</div>
       {stars.map((star) => (
         <div
@@ -84,9 +81,16 @@ function App() {
         />
       ))}
 
-      {/* --- SANTA GIF --- */}
-      {/* Make sure santa.gif is in your public folder */}
-      <img src="/santa.gif" alt="Santa" className="santa-img" />
+      {/* --- Background Characters & Trees --- */}
+      <img src="/santa.gif" alt="Santa" className="bg-element santa-img" />
+      <img src="/baymax.gif" alt="Baymax" className="bg-element baymax-img" />
+      <img src="/pikachu.gif" alt="Pikachu" className="bg-element pikachu-img" />
+      
+      <div className="bg-element bg-tree" style={{ left: '5%', opacity: 0.5 }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ left: '25%', transform: 'scale(0.8)' }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '30%', opacity: 0.6 }}>🎄</div>
+      <div className="bg-element bg-tree" style={{ right: '5%', transform: 'scale(1.2)' }}>🎄</div>
+
 
       {/* --- Snow --- */}
       {snowflakes.map((flake) => (
@@ -132,6 +136,19 @@ function App() {
       {selectedGift && (
         <div className="overlay" onClick={() => setSelectedGift(null)}>
           <div className="popup-card" onClick={(e) => e.stopPropagation()}>
+            
+            {/* Modal Corner Lights */}
+            <div className="modal-light-corner top-left">
+              <div className="modal-bulb red"></div>
+              <div className="modal-bulb green"></div>
+              <div className="modal-bulb red"></div>
+            </div>
+            <div className="modal-light-corner top-right">
+              <div className="modal-bulb green"></div>
+              <div className="modal-bulb red"></div>
+              <div className="modal-bulb green"></div>
+            </div>
+
             <span className="popup-emoji">{selectedGift.rewardEmoji}</span>
             <div className="popup-title">{selectedGift.title}</div>
             <div className="popup-msg">{selectedGift.message}</div>
