@@ -3,20 +3,25 @@
 :root {
   --primary-red: #ff3333;
   --gold: #ffd700;
-  --bg-gradient: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%); /* Sunset/Night vibe */
+  --bg-gradient: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
   --snow-white: #f0f4f8;
 }
 
-body {
+/* --- THE FIX IS HERE --- */
+html, body, #root {
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  overflow: hidden; /* Lock the screen so no scrollbars appear */
+}
+/* ----------------------- */
+
+body {
   background: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
   font-family: 'Poppins', sans-serif;
   color: white;
-  user-select: none; /* Prevents highlighting text when clicking fast */
+  user-select: none;
 }
 
 .container {
@@ -56,7 +61,7 @@ body {
 .santa-container {
   position: absolute;
   top: 10%;
-  left: -20%; /* Start off-screen */
+  left: -20%;
   font-size: 4rem;
   z-index: 2;
   animation: flyAcross 15s linear infinite;
@@ -113,7 +118,7 @@ p {
 .gifts-row {
   display: flex;
   gap: 20px;
-  z-index: 20; /* On top of ground */
+  z-index: 20;
   margin-bottom: 10px;
 }
 
