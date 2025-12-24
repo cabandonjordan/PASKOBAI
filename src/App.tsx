@@ -9,6 +9,14 @@ interface Snowflake {
   size: number;
 }
 
+interface Star {
+  id: number;
+  top: number;
+  left: number;
+  size: number;
+  delay: number;
+}
+
 interface Gift {
   id: number;
   emoji: string;
@@ -18,23 +26,37 @@ interface Gift {
 
 function App() {
   const [snowflakes, setSnowflakes] = useState<Snowflake[]>([]);
+  const [stars, setStars] = useState<Star[]>([]);
   
-  // These are the gifts on the ground
+  // Interactive Gifts
   const [gifts, setGifts] = useState<Gift[]>([
-    { id: 1, emoji: '🎁', surprise: '🧸', isOpened: false },
-    { id: 2, emoji: '🎁', surprise: '💖', isOpened: false },
-    { id: 3, emoji: '🎁', surprise: '🍫', isOpened: false },
+    { id: 1, emoji: '🎁', surprise: '🧸 Toy!', isOpened: false },
+    { id: 2, emoji: '🎁', surprise: '💖 Love', isOpened: false },
+    { id: 3, emoji: '🎁', surprise: '💰 Cash', isOpened: false },
+    { id: 4, emoji: '🎁', surprise: '🍫 Choco', isOpened: false },
   ]);
 
+  // Setup animations on load
   useEffect(() => {
+    // Generate Snow
     const flakes = Array.from({ length: 50 }).map((_, i) => ({
       id: i,
       left: Math.random() * 100,
-      duration: Math.random() * 5 + 5,
+      duration: Math.random() * 5 + 4,
       delay: Math.random() * 5,
-      size: Math.random() * 1 + 0.5,
+      size: Math.random() * 1.5 + 0.5,
     }));
     setSnowflakes(flakes);
+
+    // Generate Background Stars
+    const newStars = Array.from({ length: 30 }).map((_, i) => ({
+      id: i,
+      top: Math.random() * 60, // Top 60% of screen only
+      left: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      delay: Math.random() * 3,
+    }));
+    setStars(newStars);
   }, []);
 
   const handleGiftClick = (id: number) => {
@@ -47,7 +69,7 @@ function App() {
       })
     );
 
-    // Reset the gift after 2 seconds so they can click again
+    // Reset after 2 seconds
     setTimeout(() => {
       setGifts((prev) =>
         prev.map((gift) => (gift.id === id ? { ...gift, isOpened: false } : gift))
@@ -57,14 +79,33 @@ function App() {
 
   return (
     <div className="container">
-      {/* Background Elements */}
-      <div className="santa-container">🎅🦌💨</div>
-      
-      <div className="bg-tree" style={{ left: '10%' }}>🌲</div>
-      <div className="bg-tree" style={{ left: '80%' }}>🌲</div>
-      <div className="bg-tree" style={{ left: '25%', fontSize: '5rem', opacity: 0.4 }}>🌲</div>
+      {/* --- Decoration: Hanging Lights --- */}
+      <div className="wire">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="light"></div>
+        ))}
+      </div>
 
-      {/* Snow */}
+      {/* --- Background: Stars & Moon --- */}
+      <div className="moon">🌕</div>
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="star"
+          style={{
+            top: `${star.top}%`,
+            left: `${star.left}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            animationDelay: `${star.delay}s`,
+          }}
+        />
+      ))}
+
+      {/* --- Flying Santa --- */}
+      <div className="santa-container">🎅🦌💨</div>
+
+      {/* --- Falling Snow --- */}
       {snowflakes.map((flake) => (
         <div
           key={flake.id}
@@ -80,16 +121,18 @@ function App() {
         </div>
       ))}
 
-      {/* Main Card */}
+      {/* --- Main Greeting Card --- */}
       <div className="card-container">
         <div className="card">
           <h1>Merry Christmas</h1>
-          <h2>To You!</h2>
-          <p>Click the gifts below for a surprise!</p>
+          <h2>To The World!</h2>
+          <p>May your holidays be filled with<br/>warmth and wonderful surprises.</p>
         </div>
       </div>
 
-      {/* The Ground & Interactive Gifts */}
+      {/* --- Ground, Snowman & Gifts --- */}
+      <div className="snowman">☃️</div>
+      
       <div className="ground">
         <div className="gifts-row">
           {gifts.map((gift) => (
